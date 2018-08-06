@@ -1,8 +1,11 @@
 <template>
   <div class="container" v-loading="pending">
-    <template v-for="item in list">
-      <project-item :item="item" :onRemove="handleChange" class="item"/>
-    </template>
+    <project-item v-for="item in list"
+                  :key="item.id"
+                  :item="item"
+                  :onRemove="handleChange"
+                  class="item"
+                  />
     <el-upload
       class="item"
       name="file"
@@ -50,10 +53,10 @@ export default {
           self.pending = false;
         });
     },
-    handleChange(file, fileList) {
+    handleChange() {
       this.updateList();
     },
-    handleSuccess(file, fileList) {
+    handleSuccess() {
       this.$refs.upload.clearFiles();
     },
     handlePending() {
