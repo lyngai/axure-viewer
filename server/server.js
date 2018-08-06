@@ -17,7 +17,7 @@ const cors = (ctx, next) => {
 	ctx.set('Access-Control-Allow-Methods', 'GET,POST,DELETE,PATCH,PUT,OPTIONS,HEAD');
 	ctx.set('Access-Control-Allow-Headers', '*');
 	// console.log(ctx);
-	console.log('cros middleware');
+	console.log('cors middleware');
 	return next(ctx);
 };
 

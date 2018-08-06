@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 // const unzip = require('unzip');
 const unzip = require('adm-zip');
 
@@ -16,7 +17,8 @@ const extractZip = (file, targetPath, entry, onClose) => {
 	// 	console.log(entry.entryName);
 	// });
 	console.log(file, targetPath, entry);
-	zip.extractEntryTo(entry+'/', targetPath, false, false);
+	// zip.extractEntryTo(entry+'/', targetPath, false, false);
+	zip.extractAllTo(path.resolve(targetPath), true);
 };
 
 module.exports = {
