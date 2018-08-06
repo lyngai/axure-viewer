@@ -1,44 +1,35 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <el-button @click="test">http request</el-button>
+  <div>
+    <h5>{{msg}}</h5>
+    <el-row type="flex" justify="center">
+        <el-card shadow="never" class="project-list">
+          <project-list />
+        </el-card>
+    </el-row>
   </div>
 </template>
 
 <script>
+import ProjectList from './ProjectList';
+
 export default {
-  name: 'HelloWorld',
+  name: 'Home',
   data() {
     return {
-      msg: 'Welcome to Your Vue.js App',
+      msg: '请上传Axure发布生成的zip文件以生成预览',
     };
   },
-  methods: {
-    test() {
-      this.$http.get('/')
-        .then((res) => {
-          window.console.log(res);
-        });
-    },
+  components: {
+    'project-list': ProjectList,
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
+h1,h2,h3,h4,h5{
+  color: #303133;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+.projext-list{
+  max-width: 66.67%;
 }
 </style>
