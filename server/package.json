@@ -1,0 +1,20 @@
+{
+  "name": "axure-viewer-server",
+  "version": "1.0.0",
+  "description": "An Axure Projects Viewer Server",
+  "main": "index.js",
+  "author": "lamyin-ngai",
+  "license": "MIT",
+  "dependencies": {
+    "adm-zip": "^0.4.11",
+    "dateformat": "^3.0.3",
+    "fs-extra": "^7.0.0",
+    "koa": "^2.5.2",
+    "koa-body": "^4.0.4",
+    "koa-router": "^7.4.0",
+    "unzip": "^0.1.11"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
