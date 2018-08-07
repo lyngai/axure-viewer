@@ -9,6 +9,7 @@
     "start": "yarn run dev",
     "serve": "cd server && node server.js",
     "lint": "eslint --ext .js,.vue src",
+    "lint-fix": "eslint --ext .js,.vue src --fix",
     "build": "node build/build.js"
   },
   "dependencies": {
