@@ -1,13 +1,6 @@
-const fs = require('fs');
 const path = require('path');
-// const unzip = require('unzip');
 const unzip = require('./adm-zip');
 
-// const extractZip = (file, targetPath, onClose) => {
-// 	fs.createReadStream(file)
-// 	  .pipe(unzip.Extract({ path: targetPath }))
-// 	  .on('close', onClose);
-// };
 // return entry
 const extractZip = (file, targetPath, entry, onClose) => {
 	try{
@@ -35,6 +28,14 @@ const extractZip = (file, targetPath, entry, onClose) => {
 		return null;
 	}
 };
+
+// const fs = require('fs');
+// const unzip = require('unzip');
+// const extractZip = (file, targetPath, onClose) => {
+// 	fs.createReadStream(file)
+// 	  .pipe(unzip.Extract({ path: targetPath }))
+// 	  .on('close', onClose);
+// };
 
 module.exports = {
 	extractZip: extractZip
