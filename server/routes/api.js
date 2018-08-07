@@ -42,25 +42,31 @@ apiRouter
 				fs.unlink(file.path, ()=>{});
 				console.log('md5: ',md5);
 				if(!exists) {
-					// 添加记录
-					db.append({
-						id: '',
-						hash: md5,
-						name: file.name.split('.').shift(),
-						url: `/projects/${md5}`,
-						path: `projects/${md5}.${ext}`,
-						uploaded_at: '',
-					});
-					// 解压文件
-					unzip.extractZip(
+					// 解压并检测文件
+					const name = file.name.split('.').shift();
+					const ret = unzip.extractZip(
 						path.resolve(`projects/${md5}.${ext}`), //zipfile
 						`./projects/${md5}`, //targetPath
-						file.name.split('.').shift(), //entry
+						name, //entry
 						(onclose) => {
 							resolve({code: 0, msg: md5});
 						}
 					);
-					resolve({code: 0, msg: md5});
+					if(ret !== null) { // ret不为null
+						// 添加记录
+						db.append({
+							id: '',
+							hash: md5,
+							name: name,
+							url: `/projects/${md5}${ret == '' ? '' : '/'+ret}`,
+							path: `projects/${md5}.${ext}`,
+							uploaded_at: '',
+						});
+						resolve({code: 0, msg: md5});
+					} else {
+						fs.unlink(path.resolve(`projects/${md5}.${ext}`), ()=>{});
+						reject('未在压缩包内找到项目入口');
+					}
 				} else {
 					reject('文件已存在');
 				}
