@@ -1,22 +1,26 @@
 <template>
   <div class="container" v-loading="pending">
-    <project-item v-for="item in list"
-                  :key="item.id"
-                  :item="item"
-                  :onRemove="handleChange"
-                  class="item"
-                  />
+    <span class="tips" v-show="pending">{{tips}}</span>
+    <template v-for="item in list">
+      <project-item
+        class="item"
+        :key="item.id"
+        :item="item"
+        :onRemove="handleChange"
+        />
+    </template>
     <el-upload
       class="item"
       name="file"
       ref="upload"
-      action="http://localhost:3000/api/project"
-      method="post"
+      action="/api/project"
       list-type="picture-card"
       :on-change="handleChange"
       :on-success="handleSuccess"
+      :on-error="handleError"
       :before-upload="handlePending"
       :before-remove="handlePending"
+      :http-request="handleUpload"
       >
       <i class="el-icon-plus"></i>
     </el-upload>
@@ -31,8 +35,9 @@ export default {
   name: 'ProjectList',
   data() {
     return {
+      tips: '若加载时间过长，请使用Chrome浏览器...',
       list: [],
-      pending: true,
+      pending: false,
     };
   },
   mounted() {
@@ -42,12 +47,12 @@ export default {
     updateList() {
       this.pending = true;
       const self = this;
-      this.$http.get('http://localhost:3000/api/project')
+      this.$http.get('/api/project')
         .then((res) => {
           self.list = res.data.data;
         })
         .catch((err) => {
-          console.error(err);
+          self.$message.error(`(${err.code}) 拉取项目列表失败`);
         })
         .finally(() => {
           self.pending = false;
@@ -56,11 +61,40 @@ export default {
     handleChange() {
       this.updateList();
     },
-    handleSuccess() {
+    handleSuccess() { // param: res
       this.$refs.upload.clearFiles();
+      this.$message.success('压缩包校验通过，已生成预览');
+    },
+    handleError(err) {
+      if (err instanceof String) {
+        this.$message.error(err);
+      } else {
+        this.$message.error(`错误：${err.data.msg}`);
+      }
     },
     handlePending() {
       this.pending = true;
+    },
+    handleUpload(option) {
+      /* process data */
+      const formData = new FormData();
+      if (option.data) {
+        Object.keys(option.data).forEach((key) => {
+          formData.append(key, option.data[key]);
+        });
+      }
+      formData.append(option.filename, option.file, option.file.name);
+      /* data prepared */
+      this.$http.post(option.action, formData, {
+        onUploadProgress(e) {
+          if (e.total > 0) { e.percent = (e.loaded / e.total) * 100; }
+          option.onProgress(e);
+        },
+      }).then((res) => {
+        option.onSuccess(res.data);
+      }).catch((err) => {
+        option.onError(err.response || err.response.error || err.responseText || 'fail to make request');
+      });
     },
   },
   components: {
@@ -75,6 +109,14 @@ export default {
   flex-wrap: wrap;
   justify-content: left;
   align-items: center;
+}
+.tips{
+  font-size: 12px;
+  color: #909399;
+  position: absolute;
+  top: 0;
+  z-index: 9000;
+  white-space: none;
 }
 .item{
   margin: 10px 10px;

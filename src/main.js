@@ -9,9 +9,29 @@ import App from './App';
 import router from './router';
 
 Vue.use(ElementUI);
-Vue.prototype.$http = axios;
-Vue.config.productionTip = false;
 
+const http = axios; // production
+// const http = axios.create({
+//   baseURL: 'http://localhost:3000/',
+// }); // dev
+
+const copyToClipboard = (dom, str) => {
+  const input = document.createElement('input');
+  input.setAttribute('readonly', 'readonly');
+  input.setAttribute('value', str);
+  dom.appendChild(input);
+  input.setSelectionRange(0, 9999);
+  input.focus();
+  if (document.execCommand('copy')) {
+    document.execCommand('copy');
+  }
+  dom.removeChild(input);
+};
+
+Vue.prototype.$http = http;
+Vue.prototype.$copyString = copyToClipboard;
+
+Vue.config.productionTip = false;
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

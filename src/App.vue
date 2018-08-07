@@ -10,12 +10,6 @@
       <ax-footer/>
     </el-footer>
   </el-container>
-<!--   <div id="app">
-    <el-row type="flex" class="row-bg" justify="center">
-      <el-col :span="16">
-      </el-col>
-    </el-row>
-  </div> -->
 </template>
 
 <script>
@@ -43,10 +37,8 @@ body{
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  /*margin-top: 60px;*/
 }
 .el-footer{
-  /*position: absolute;*/
   bottom: 0;
   width: 100%;
 }
