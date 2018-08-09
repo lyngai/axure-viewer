@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const dateFormat = require('dateformat');
-const dataFile = path.resolve('data/data.json');
+const dataFile = path.resolve('./data/data.json');
 
 const readData = () => {
 	return fs.readFileSync(dataFile);
@@ -50,10 +50,10 @@ const append = (obj) => {
 };
 
 const remove = (id) => {
-	const obj = find(id);
-	if(obj) {
-		let data = JSON.parse(readData());
-		data.projects.splice(data.projects.indexOf(obj), 1);
+	let data = JSON.parse(readData());
+	const index = data.projects.map((obj) => obj.id).indexOf(id);
+	if(index !== -1) {
+		data.projects.splice(index, 1);
 		writeData(JSON.stringify(data, null, 1));
 		return 0; // OK
 	}
