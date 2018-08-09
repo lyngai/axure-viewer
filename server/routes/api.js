@@ -1,4 +1,5 @@
 const fs = require('fs');
+const rm = require('../scripts/recursive-rm');
 const path = require('path');
 const crypto = require('crypto');
 const Router = require('koa-router');
@@ -87,14 +88,14 @@ apiRouter
       await new Promise((resolve, reject) => {
         fs.unlink(path.resolve(record.path), (err) => {
           if(err) reject(err);
-          db.remove(id);
           resolve();
         });
-      }).then(() => new Promise((resolve, reject) => {
-        // console.log(path.resolve(`.${record.url}`));
-        // 无需判断成功与否
-        fs.rmdir(path.resolve(`.${record.url}`), (err) => {resolve();}); 
-      })).then(() => {
+      }).then(() => rm.promises.removeDir(
+        path.resolve(`./projects/${record.hash}`), /* dir to remove */
+        true, /* safe delete */
+        path.resolve(`./projects`) /* restrict path */ 
+      )).then(() => {
+        db.remove(id);
         ctx.body = {code: 0, msg: '删除成功'};
       }).catch((err) => {
         console.error(err);
