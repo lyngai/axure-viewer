@@ -3,7 +3,7 @@ const path = require('path');
 const crypto = require('crypto');
 const Router = require('koa-router');
 const db = require('../scripts/db');
-const unzip = require('../scripts/unzip');
+const unzip = require('../scripts/unzip.js');
 
 const apiRouter = new Router({
   prefix: '/api',
@@ -18,8 +18,8 @@ apiRouter
 .post('/project', async (ctx, next) => {
   let file = ctx.request.files.file;
   if(file) {
-    let ext = file.name.split('.').pop();
-    if(ext !== 'zip') {
+    let ext = path.extname(file.name); // expected: .zip
+    if(ext !== '.zip') {
       ctx.status = 400;
       ctx.body = {code: 1, msg: '不支持的文件类型'};
       fs.unlink(file.path, ()=>{});
@@ -34,21 +34,21 @@ apiRouter
         writer.write(data);
         hash.update(data);
       });
-      reader.on('end', () => {
+      reader.on('end', async () => {
         /* 结束写入，删除临时文件 */
         writer.end();
         fs.unlink(file.path, ()=>{});
         /* 以md5重命名 */
         const md5 = hash.digest('hex');
-        const relativeSavePath = `projects/${md5}.${ext}`;
+        const relativeSavePath = `projects/${md5}${ext}`;
         const savePath = path.resolve(relativeSavePath);
         const exists = fs.existsSync(savePath);
         console.log('uploaded md5: ',md5);
         if(!exists) {
           fs.renameSync(movePath, savePath);
-          const oringinalName = file.name.split('.').shift(); 
+          const oringinalName = path.basename(file.name, ext); 
           /* 解压并检测文件: zipPath, extractPath, entry, onClose */
-          const realEntry = unzip.extractZip(savePath, `./projects/${md5}`, oringinalName, ()=>{});
+          let realEntry = await unzip.extractZip(savePath, `./projects/${md5}`, oringinalName);
           if(realEntry !== null) { // ret不为null
             // 添加记录
             db.append({
@@ -62,7 +62,7 @@ apiRouter
             resolve({code: 0, msg: md5});
           } else {
             fs.unlink(savePath, ()=>{});
-            reject('未在压缩包内找到项目入口');
+            reject('未在压缩包内找到项目入口，或压缩格式不受支持');
           }
         } else {
           fs.unlink(movePath, ()=>{});
