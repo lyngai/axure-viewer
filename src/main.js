@@ -8,6 +8,15 @@ import 'element-ui/lib/theme-chalk/index.css';
 import App from './App';
 import router from './router';
 
+if (window.Promise && !window.Promise.prototype.finally) {
+  window.Promise.prototype.finally = function (callback) {
+    return this.then(
+      value => this.constructor.resolve(callback()).then(() => value),
+      reason => this.constructor.resolve(callback()).then(() => { throw reason; }),
+    )
+  };
+}
+
 Vue.use(ElementUI);
 
 const http = axios; // production
