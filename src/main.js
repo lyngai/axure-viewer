@@ -7,22 +7,24 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 import App from './App';
 import router from './router';
+import FolderUpload from './components/folder-upload';
 
 if (window.Promise && !window.Promise.prototype.finally) {
-  window.Promise.prototype.finally = function (callback) {
-    return this.then(
+  window.Promise.prototype.finally = callback => (
+    this.then(
       value => this.constructor.resolve(callback()).then(() => value),
       reason => this.constructor.resolve(callback()).then(() => { throw reason; }),
     )
-  };
+  );
 }
 
 Vue.use(ElementUI);
+Vue.use(FolderUpload);
 
-const http = axios; // production
-// const http = axios.create({
-//   baseURL: 'http://localhost:3000/',
-// }); // dev
+const http =
+  process.env.NODE_ENV === 'development' ?
+    axios.create({ baseURL: 'http://localhost:3000/' }) : // dev
+    axios; // prod
 
 const copyToClipboard = (dom, str) => {
   const input = document.createElement('input');

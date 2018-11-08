@@ -62,6 +62,7 @@ apiRouter
               id: '',
               hash: md5,
               name: oringinalName,
+              type: ext.slice(1),
               url: `/projects/${md5}${(realEntry=='')?'':'/'+realEntry}`,
               path: relativeSavePath,
               uploaded_at: '',

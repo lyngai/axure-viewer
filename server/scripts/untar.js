@@ -1,4 +1,6 @@
+const path = require('path');
 const tar = require('tar');
+const fs = require('fs');
 
 const extractTar = async (file, targetPath, entry) => {//, onClose
   let entry_type = -1;
@@ -27,12 +29,19 @@ const extractTar = async (file, targetPath, entry) => {//, onClose
     });
   })
   .then(() => {
-    // 解压文件
-    tar.x({
-      file: file,
-      cwd: path.resolve(targetPath)
-    }).then(() => Promise.resolve()
-    ).catch(err => Promise.reject(err));
+    const cwd = path.resolve(targetPath);
+    fs.mkdir(cwd, { recursive: true }, function(err) {
+      if(err) {
+        Promise.reject(err);
+        return;
+      }
+      // 解压文件
+      tar.x({
+        file: file,
+        cwd: cwd
+      }).then(() => Promise.resolve()
+      ).catch(err => Promise.reject(err));
+    });
   })
   .catch((err) => {
     console.error(err);

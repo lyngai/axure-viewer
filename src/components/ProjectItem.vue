@@ -1,6 +1,7 @@
 <template>
   <el-card :body-style="{ padding: '0px' }" shadow="hover" :id="item.id">
-    <img src="../assets/zip.png" class="image">
+    <img v-if="item.type == 'tar'" src="../assets/tar.png" class="image" />
+    <img v-else src="../assets/zip.png" class="image" />
     <div class="info">
       <el-row>
         <span class="name">{{item.name}}</span>

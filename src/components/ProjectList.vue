@@ -9,21 +9,37 @@
         :onRemove="handleChange"
         />
     </template>
-    <el-upload
-      class="item"
-      name="file"
-      ref="upload"
-      action="/api/project"
-      list-type="picture-card"
-      :on-change="handleChange"
-      :on-success="handleSuccess"
-      :on-error="handleError"
-      :before-upload="handlePending"
-      :before-remove="handlePending"
-      :http-request="handleUpload"
-      >
-      <i class="el-icon-plus"></i>
-    </el-upload>
+    <div class="item uploads-group">
+      <el-upload
+        name="file"
+        ref="upload"
+        action="/api/project"
+        list-type="picture-card"
+        :on-change="handleChange"
+        :on-success="handleSuccess"
+        :on-error="handleError"
+        :before-upload="handlePending"
+        :before-remove="handlePending"
+        :http-request="handleUpload"
+        >
+        <i class="el-icon-plus" />
+      </el-upload>
+<!--       <el-upload-folder
+        name="folder"
+        ref="upload-folder"
+        action="http://localhost:3000/api/project/folder"
+        list-type="picture-card"
+        :on-change="handleChange"
+        :on-success="handleSuccess"
+        :on-error="handleError"
+        :before-upload="handlePending"
+        :before-remove="handlePending"
+        :http-request="handleUploadFolder"
+        >
+         <span>上传文件夹</span>
+         <i class="el-icon-plus" />
+      </el-upload-folder> -->
+    </div>
   </div>
 </template>
 
@@ -41,6 +57,7 @@ export default {
     };
   },
   mounted() {
+    console.log(this.$refs.upload);
     this.updateList();
   },
   methods: {
@@ -96,6 +113,9 @@ export default {
         option.onError(err.response || err.response.error || err.responseText || 'fail to make request');
       });
     },
+    handleUploadFolder(option) {
+      console.log(option);
+    },
   },
   components: {
     'project-item': ProjectItem,
@@ -121,5 +141,8 @@ export default {
 .item{
   margin: 10px 10px;
   padding: 0 10px 10px;
+}
+.uploads-group {
+  display: flex;
 }
 </style>
