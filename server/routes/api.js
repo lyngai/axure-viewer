@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const Router = require('koa-router');
 const db = require('../scripts/db');
 const unzip = require('../scripts/unzip.js');
+const untar = require('../scripts/untar.js');
 
 const apiRouter = new Router({
   prefix: '/api',
@@ -20,7 +21,7 @@ apiRouter
   let file = ctx.request.files.file;
   if(file) {
     let ext = path.extname(file.name); // expected: .zip
-    if(ext !== '.zip') {
+    if(ext !== '.zip' && ext !== '.tar') {
       ctx.status = 400;
       ctx.body = {code: 1, msg: '不支持的文件类型'};
       fs.unlink(file.path, ()=>{});
@@ -44,12 +45,17 @@ apiRouter
         const relativeSavePath = `projects/${md5}${ext}`;
         const savePath = path.resolve(relativeSavePath);
         const exists = fs.existsSync(savePath);
-        console.log('uploaded md5: ',md5);
+        console.log(`[${ext}]uploaded md5: `, md5);
         if(!exists) {
           fs.renameSync(movePath, savePath);
           const oringinalName = path.basename(file.name, ext); 
           /* 解压并检测文件: zipPath, extractPath, entry, onClose */
-          let realEntry = await unzip.extractZip(savePath, `./projects/${md5}`, oringinalName);
+          let realEntry;
+          if(ext === '.zip') {
+            realEntry = await unzip.extractZip(savePath, `./projects/${md5}`, oringinalName);
+          } else if(ext === '.tar') {
+            realEntry = await untar.extractTar(savePath, `./projects/${md5}`, oringinalName);
+          }
           if(realEntry !== null) { // ret不为null
             // 添加记录
             db.append({
