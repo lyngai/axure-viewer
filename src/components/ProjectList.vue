@@ -7,6 +7,7 @@
         :key="item.id"
         :item="item"
         :onRemove="handleChange"
+        :onChange="handleChange"
         />
     </template>
     <div class="item uploads-group">
@@ -45,7 +46,6 @@
 
 <script>
 import ProjectItem from './ProjectItem';
-import '../assets/zip.png';
 
 export default {
   name: 'ProjectList',
@@ -113,9 +113,9 @@ export default {
         option.onError(err.response || err.response.error || err.responseText || 'fail to make request');
       });
     },
-    handleUploadFolder(option) {
-      // console.log(option);
-    },
+    // handleUploadFolder(option) {
+    //   // console.log(option);
+    // },
   },
   components: {
     'project-item': ProjectItem,

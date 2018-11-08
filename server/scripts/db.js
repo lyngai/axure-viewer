@@ -60,9 +60,27 @@ const remove = (id) => {
 	return 1; // ERROR
 };
 
+const edit = (id, newData = {}) => {
+	let data = JSON.parse(readData());
+	const index = data.projects.map((obj) => obj.id).indexOf(id);
+	if(index !== -1) {
+		let filteredData = {};
+		for(let key in newData) {
+			if(data.projects[index].hasOwnProperty(key) && key !== 'id') {
+				filteredData[key] = newData[key];
+			}
+		}
+		Object.assign(data.projects[index], filteredData);
+		writeData(JSON.stringify(data, null, 1));
+		return 0; // OK
+	}
+	return 1; // ERROR
+};
+
 module.exports = {
 	read,
 	find,
+	edit,
 	append,
 	remove,
 };

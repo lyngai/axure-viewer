@@ -4,7 +4,7 @@
     <img v-else src="../assets/zip.png" class="image" />
     <div class="info">
       <el-row>
-        <span class="name">{{item.name}}</span>
+        <edit-span class="name" :context="item.name" :afterEdit="editName"/>
       </el-row>
       <el-row>
         <time>上传时间：{{item.uploaded_at}}</time>
@@ -20,13 +20,17 @@
 </template>
 
 <script>
-import '../assets/zip.png';
+import EditSpan from './EditSpan';
 
 export default {
   name: 'ProjectItem',
   props: {
     item: Object,
     onRemove: {
+      type: Function,
+      default: () => {},
+    },
+    onChange: {
       type: Function,
       default: () => {},
     },
@@ -59,6 +63,21 @@ export default {
       this.$copyString(this.$refs.copy.$el, `${window.location.origin}${this.item.url}/`);
       this.$message.success('网址成功复制到剪切板');
     },
+    editName(value) {
+      this.$http.post(`/api/project/${this.item.id}`, {name: value})
+        .then(() => {
+          this.$message({ type: 'success', message: '重命名成功!' });
+        })
+        .catch((err) => {
+          this.$message({ type: 'error', message: '重命名错误！' });
+        })
+        .finally(() => {
+          this.onChange();
+        });
+    }
+  },
+  components: {
+    'edit-span': EditSpan,
   },
 };
 </script>

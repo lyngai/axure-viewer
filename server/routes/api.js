@@ -87,6 +87,28 @@ apiRouter
     ctx.status = 400;
   }
 })
+.post('/project/:hashid', async (ctx, next) => {
+  const id = ctx.params.hashid;
+  const name = ctx.request.body.name;
+  if(id && name) {
+    const record = db.find(id);
+    if(record) {
+      const result = db.edit(id, {name: name});
+      if(result === 0) {
+        ctx.body = {code: 0, msg: '修改成功'};
+      } else {
+        ctx.status = 400;
+        ctx.body = {code: 1, msg: '修改失败'};
+      }
+    } else {
+      ctx.status = 400;
+      ctx.body = {code: 1, msg: '项目不存在'};
+    }
+  } else {
+    ctx.status = 400;
+    ctx.body = {code: 1, msg: '参数错误'};
+  }
+})
 .del('/project/:hashid', async (ctx, next) => {
   const id = ctx.params.hashid;
   if(id) {
