@@ -57,7 +57,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.$refs.upload);
+    // console.log(this.$refs.upload);
     this.updateList();
   },
   methods: {
@@ -114,7 +114,7 @@ export default {
       });
     },
     handleUploadFolder(option) {
-      console.log(option);
+      // console.log(option);
     },
   },
   components: {
