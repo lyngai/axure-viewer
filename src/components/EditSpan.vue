@@ -1,12 +1,36 @@
 <template>
   <div v-if="!isEdit">
     <span>{{value}}</span>
-    <el-button class="edit-btn" icon="el-icon-edit" size="mini" type="text" @click="startEdit" title="点击编辑"/>
+    <el-button
+      class="edit-btn"
+      type="text"
+      size="mini"
+      title="点击编辑"
+      icon="el-icon-edit"
+      @click="startEdit"
+      />
   </div>
   <div v-else>
-    <el-input class="edit-input" ref="edit-input" :value="value" size="mini"/>
-    <el-button icon="el-icon-check" size="mini" type="text" @click="saveEdit" title="点击保存"/>
-    <el-button icon="el-icon-circle-close" size="mini" type="text" @click="cancelEdit" title="点击取消"/>
+    <el-input
+      ref="edit-input"
+      class="edit-input"
+      size="mini"
+      :value="value"
+      />
+    <el-button
+      type="text"
+      size="mini"
+      title="点击保存"
+      icon="el-icon-check"
+      @click="saveEdit"
+      />
+    <el-button
+      type="text"
+      size="mini"
+      title="点击取消"
+      icon="el-icon-circle-close"
+      @click="cancelEdit"
+      />
   </div>
 </template>
 
@@ -24,7 +48,7 @@ export default {
   data() {
     return {
       isEdit: false,
-      value: this.context
+      value: this.context,
     };
   },
   methods: {
@@ -38,7 +62,7 @@ export default {
     },
     cancelEdit() {
       this.isEdit = false;
-    }
+    },
   },
 };
 </script>

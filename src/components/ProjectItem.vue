@@ -64,17 +64,17 @@ export default {
       this.$message.success('网址成功复制到剪切板');
     },
     editName(value) {
-      this.$http.post(`/api/project/${this.item.id}`, {name: value})
+      this.$http.post(`/api/project/${this.item.id}`, { name: value })
         .then(() => {
           this.$message({ type: 'success', message: '重命名成功!' });
         })
-        .catch((err) => {
+        .catch(() => { // err
           this.$message({ type: 'error', message: '重命名错误！' });
         })
         .finally(() => {
           this.onChange();
         });
-    }
+    },
   },
   components: {
     'edit-span': EditSpan,
