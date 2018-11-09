@@ -1,14 +1,6 @@
 <template>
   <div v-if="!isEdit">
-    <span>{{value}}</span>
-    <el-button
-      class="edit-btn"
-      type="text"
-      size="mini"
-      title="点击编辑"
-      icon="el-icon-edit"
-      @click="startEdit"
-      />
+    <span class="editable-span" title="点击编辑" @click="startEdit">{{value}}</span>
   </div>
   <div v-else>
     <el-input
@@ -16,6 +8,8 @@
       class="edit-input"
       size="mini"
       :value="value"
+      @keyup.enter.native="saveEdit"
+      @keyup.esc.native="cancelEdit"
       />
     <el-button
       type="text"
@@ -54,6 +48,9 @@ export default {
   methods: {
     startEdit() {
       this.isEdit = true;
+      this.$nextTick(() => {
+        this.$refs['edit-input'].$refs.input.focus();
+      });
     },
     saveEdit() {
       this.isEdit = false;
@@ -68,11 +65,24 @@ export default {
 </script>
 
 <style scoped>
-.edit-btn {
-  position: absolute;
-  top: -3px;
+.editable-span {
+  padding: 0 1em;
+  cursor: pointer;
+}
+.editable-span:hover {
+  border: 1px solid #409EFF;
+  padding: 0 calc(1em - 1px);
+  border-radius: 3px;
 }
 .edit-input {
-  width: 65%;
+  width: 70%;
+}
+.el-button+.el-button {
+  margin-left: 1px;
+}
+</style>
+<style>
+.edit-input .el-input__inner {
+  padding: 0 .8em;
 }
 </style>
