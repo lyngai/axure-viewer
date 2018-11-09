@@ -11,20 +11,22 @@
       @keyup.enter.native="saveEdit"
       @keyup.esc.native="cancelEdit"
       />
-    <el-button
-      type="text"
-      size="mini"
-      title="点击保存"
-      icon="el-icon-check"
-      @click="saveEdit"
-      />
-    <el-button
-      type="text"
-      size="mini"
-      title="点击取消"
-      icon="el-icon-circle-close"
-      @click="cancelEdit"
-      />
+    <div>
+      <el-button
+        type="text"
+        size="mini"
+        title="点击保存"
+        icon="el-icon-check"
+        @click="saveEdit"
+        />
+      <el-button
+        type="text"
+        size="mini"
+        title="点击取消"
+        icon="el-icon-circle-close"
+        @click="cancelEdit"
+        />
+    </div>
   </div>
 </template>
 
@@ -75,7 +77,8 @@ export default {
   border-radius: 3px;
 }
 .edit-input {
-  width: 70%;
+  /*width: 90%;*/
+  font-size: 14px;
 }
 .el-button+.el-button {
   margin-left: 1px;
@@ -84,5 +87,6 @@ export default {
 <style>
 .edit-input .el-input__inner {
   padding: 0 .8em;
+  text-align: center;
 }
 </style>
