@@ -14,7 +14,7 @@
     "koa-body": "^4.0.4",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
-    "tar": "^4.4.6",
+    "tar": "^4.4.15",
     "unzip": "^0.1.11"
   },
   "scripts": {
